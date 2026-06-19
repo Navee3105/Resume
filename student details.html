@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Details</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #eef4ff;
+      padding: 30px;
+    }
+
+    .container {
+      display: flex;
+      gap: 30px;
+    }
+
+    .form-box, .table-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px gray;
+    }
+
+    .form-box {
+      width: 30%;
+    }
+
+    .table-box {
+      width: 65%;
+    }
+
+    input, select {
+      width: 95%;
+      padding: 8px;
+      margin-bottom: 12px;
+    }
+
+    button {
+      padding: 7px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .save {
+      background-color: green;
+      color: white;
+    }
+
+    .edit {
+      background-color: blue;
+      color: white;
+    }
+
+    .delete {
+      background-color: red;
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid gray;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #dbeafe;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Student Details Page</h2>
+
+  <div class="container">
+
+    <div class="form-box">
+      <h3>Student Form</h3>
+
+      <label>Student Name:</label><br>
+      <input type="text" id="name"><br>
+
+      <label>Email:</label><br>
+      <input type="email" id="email"><br>
+
+      <label>Phone No:</label><br>
+      <input type="number" id="phone"><br>
+
+      <label>Course:</label><br>
+      <select id="course">
+        <option value="">-- Select Course --</option>
+        <option value="AIML">AIML</option>
+        <option value="IT">IT</option>
+        <option value="CSE">CSE</option>
+        <option value="EEE">EEE</option>
+      </select><br>
+
+      <button class="save" onclick="saveStudent()">Save</button>
+    </div>
+
+    <div class="table-box">
+      <h3>Student Details</h3>
+
+      <table id="studentTable">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Course</th>
+          <th>Action</th>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    let editRow = null;
+
+    function saveStudent() {
+      let name = document.getElementById("name").value;
+      let email = document.getElementById("email").value;
+      let phone = document.getElementById("phone").value;
+      let course = document.getElementById("course").value;
+
+      if (name == "" || email == "" || phone == "" || course == "") {
+        alert("Please fill all details");
+        return;
+      }
+
+      let table = document.getElementById("studentTable");
+
+      if (editRow == null) {
+        let row = table.insertRow();
+
+        row.insertCell(0).innerHTML = name;
+        row.insertCell(1).innerHTML = email;
+        row.insertCell(2).innerHTML = phone;
+        row.insertCell(3).innerHTML = course;
+        row.insertCell(4).innerHTML =
+          `<button class="edit" onclick="editStudent(this)">Edit</button>
+           <button class="delete" onclick="deleteStudent(this)">Delete</button>`;
+      } else {
+        editRow.cells[0].innerHTML = name;
+        editRow.cells[1].innerHTML = email;
+        editRow.cells[2].innerHTML = phone;
+        editRow.cells[3].innerHTML = course;
+
+        editRow = null;
+      }
+
+      clearForm();
+    }
+
+    function editStudent(button) {
+      editRow = button.parentElement.parentElement;
+
+      document.getElementById("name").value = editRow.cells[0].innerHTML;
+      document.getElementById("email").value = editRow.cells[1].innerHTML;
+      document.getElementById("phone").value = editRow.cells[2].innerHTML;
+      document.getElementById("course").value = editRow.cells[3].innerHTML;
+    }
+
+    function deleteStudent(button) {
+      let row = button.parentElement.parentElement;
+      row.remove();
+
+      editRow = null;
+      clearForm();
+    }
+
+    function clearForm() {
+      document.getElementById("name").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("course").value = "";
+    }
+  </script>
+
+</body>
+</html>
